@@ -1,34 +1,39 @@
 .carousel {
   position: relative;
   overflow: hidden;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0;
+  padding: 0;
 }
 
 .carousel__track-container {
-  width: 1000px;
+  width: 100%;
 }
 
 .carousel__track {
   display: flex;
-  transition: transform var(--transition-duration, 0.8s) ease; /* 속도 변경가능하게 수정 */
+  transition: transform var(--transition-duration, 0.01s) ease; /* 속도 변경가능하게 수정 */
   list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
 .carousel__slide {
-  width: 100%;
-  height: 50%;
+  flex: 0 0 100%;
+  height: auto;
   box-sizing: border-box;
+  margin: 0;
 }
 
 .carousel__slide img {
-  margin: 0;
-  padding: 0;
-  width: 1000px;
+  width: 100%;
   height: 300px;
 }
 
 .carousel__nav {
   position: absolute;
-  bottom: 10px;
+  bottom: 15px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -36,8 +41,6 @@
 
 .carousel__indicator {
   position: relative;
-  bottom: 50px;
-  left: 50%;
   width: 5px;
   height: 11px;
   border-radius: 50%;
@@ -72,4 +75,49 @@
 .play-pause-btn:hover {
   background-color: #aaaaaa;
   color: rgb(0, 0, 0);
+}
+
+.carousel__button {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.carousel__button--left {
+  left: 10px;
+}
+
+.carousel__button--right {
+  right: 10px;
+}
+
+.carousel__button:hover {
+  background-color: rgba(86, 86, 86, 0.7);
+  color: #000;
+}
+
+/* 반응형 */
+@media (max-width: 600px) {
+  .carousel {
+    max-width: 100%;
+  }
+
+  .carousel__slide {
+    height: 50vh;
+  }
+
+  .carousel__slide img {
+    height: auto;
+  }
 }

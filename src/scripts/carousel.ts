@@ -52,14 +52,18 @@ function updateIndicators(): void {
 
 // 슬라이드 자동 전환
 function startAutoPlay(): void {
-  slideInterval = window.setInterval(() => {
-    goToSlide(currentSlide + 1);
-  }, slideSpeed);
+  // 자동 재생일 때만
+  if (autoPlay && !slideInterval) {
+    slideInterval = window.setInterval(() => {
+      goToSlide(currentSlide + 1);
+    }, slideSpeed);
+  }
 }
 
 // 자동 재생 멈춤
 function stopAutoPlay(): void {
   clearInterval(slideInterval);
+  slideInterval = undefined;
 }
 
 // 버튼
