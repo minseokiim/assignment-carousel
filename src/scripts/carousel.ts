@@ -1,6 +1,5 @@
 import '../styles/style.css';
 
-const carousel = document.querySelector('.carousel') as HTMLElement;
 const slides = document.querySelectorAll(
   '.carousel__slide',
 ) as NodeListOf<HTMLElement>;
@@ -15,21 +14,16 @@ const indicators = document.querySelectorAll(
 ) as NodeListOf<HTMLElement>;
 
 let currentSlide = 0;
-let autoPlay = true;
-let slideInterval: number | undefined;
-const slideSpeed = 3000; // 슬라이드 간격
-const transitionDuration = 0.8; // 슬라이드 전환 속도
+let autoPlay = true; //자동재생 여부
+let slideInterval: number | null = null;
+const slideSpeed = 1000; // 슬라이드 간격
 
 // 슬라이드 이동
-function goToSlide(index: number): void {
+function moveSlide(index: number): void {
   currentSlide = (index + slides.length) % slides.length;
 
   slides.forEach((slide, idx) => {
-    if (idx === currentSlide) {
-      slide.classList.add('current-slide');
-    } else {
-      slide.classList.remove('current-slide');
-    }
+    slide.classList.toggle('current-slide', idx === currentSlide);
   });
 
   const offset = currentSlide * -100;
@@ -42,69 +36,71 @@ function goToSlide(index: number): void {
 // 인디케이터 업데이트
 function updateIndicators(): void {
   indicators.forEach((indicator, index) => {
-    if (index === currentSlide) {
-      indicator.classList.add('active');
-    } else {
-      indicator.classList.remove('active');
-    }
+    indicator.classList.toggle('active', index === currentSlide);
   });
 }
 
 // 슬라이드 자동 전환
 function startAutoPlay(): void {
-  // 자동 재생일 때만
   if (autoPlay && !slideInterval) {
+    // autoPlay가 true이고 slideInterval이 설정되어 있지 않을 때만
     slideInterval = window.setInterval(() => {
-      goToSlide(currentSlide + 1);
+      moveSlide(currentSlide + 1);
     }, slideSpeed);
   }
 }
 
 // 자동 재생 멈춤
 function stopAutoPlay(): void {
-  clearInterval(slideInterval);
-  slideInterval = undefined;
+  if (slideInterval) {
+    clearInterval(slideInterval); // 현재 interval을 정지
+    slideInterval = null; // slideInterval을 null로 설정
+  }
 }
 
-// 버튼
+// 전/후 버튼
 nextBtn.addEventListener('click', () => {
-  goToSlide(currentSlide + 1);
-  stopAutoPlay();
-  startAutoPlay();
+  moveSlide(currentSlide + 1);
 });
 
 prevBtn.addEventListener('click', () => {
-  goToSlide(currentSlide - 1);
-  stopAutoPlay();
-  startAutoPlay();
+  moveSlide(currentSlide - 1);
 });
 
 // 인디케이터
 indicators.forEach((indicator) => {
   indicator.addEventListener('click', () => {
     const slideIndex = parseInt(indicator.getAttribute('data-slide')!) - 1;
-    goToSlide(slideIndex);
+    moveSlide(slideIndex);
     stopAutoPlay();
     startAutoPlay();
   });
 });
 
-// 자동 재생 버튼
+// 재생 버튼
 const playPauseBtn = document.createElement('button');
 playPauseBtn.textContent = 'Pause';
 playPauseBtn.classList.add('play-pause-btn');
 document.body.appendChild(playPauseBtn);
+
 playPauseBtn.addEventListener('click', () => {
-  if (autoPlay) {
-    stopAutoPlay();
-    playPauseBtn.textContent = 'Play';
-  } else {
-    startAutoPlay();
-    playPauseBtn.textContent = 'Pause';
-  }
+  // 1. 처음 동작때 autoPlay가 true임
+  // 2. 버튼 클릭시 false됨
+  // 4. 다시 클릭시 true됨
   autoPlay = !autoPlay;
+  if (autoPlay) {
+    // 5. 그리고 자동 실행
+    console.log('자동 재생');
+    startAutoPlay(); // 상태가 true일 때 자동 재생 시작
+    playPauseBtn.textContent = 'Pause';
+  } else {
+    // 3. 그리고 바로 중지
+    console.log('자동 재생 중지');
+    stopAutoPlay(); // 상태가 false일 때 자동 재생 중지
+    playPauseBtn.textContent = 'Play';
+  }
 });
 
 // 초기화
-goToSlide(0);
+moveSlide(0);
 startAutoPlay();
