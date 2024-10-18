@@ -1,14 +1,75 @@
-:root {
-  font-family: Inter, system-ui, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+.carousel {
+  position: relative;
+  overflow: hidden;
+}
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+.carousel__track-container {
+  width: 1000px;
+}
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.carousel__track {
+  display: flex;
+  transition: transform var(--transition-duration, 0.8s) ease; /* 속도 변경가능하게 수정 */
+  list-style-type: none;
+}
+
+.carousel__slide {
+  width: 100%;
+  height: 50%;
+  box-sizing: border-box;
+}
+
+.carousel__slide img {
+  margin: 0;
+  padding: 0;
+  width: 1000px;
+  height: 300px;
+}
+
+.carousel__nav {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+}
+
+.carousel__indicator {
+  position: relative;
+  bottom: 50px;
+  left: 50%;
+  width: 5px;
+  height: 11px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin: 0 5px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+
+.carousel__indicator.active {
+  background-color: #333;
+  opacity: 1;
+}
+
+.carousel__indicator:hover {
+  background-color: #575757;
+}
+
+.play-pause-btn {
+  padding: 5px 10px;
+  background-color: #000000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.play-pause-btn:hover {
+  background-color: #aaaaaa;
+  color: rgb(0, 0, 0);
 }
