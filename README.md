@@ -28,6 +28,9 @@ https://infinite-carousel-pearl.vercel.app/
 
 ### 3. 반응형 웹 디자인 적용
 
+- pc를 기준으로 구현
+- 패드와 모바일 추가
+
 <br/>
 
 ## ⚒️ 기술 스택

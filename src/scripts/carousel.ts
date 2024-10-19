@@ -111,8 +111,7 @@ function updateSettings(): void {
   const intervalInput = document.getElementById(
     'slideInterval',
   ) as HTMLInputElement;
-
-  const errorMessage = document.getElementById('error-message') as HTMLElement;
+  const errorMessage = document.querySelector('.error-message') as HTMLElement;
 
   const newSpeed = parseInt(speedInput.value);
   const newInterval = parseInt(intervalInput.value);
@@ -143,7 +142,7 @@ function updateSettings(): void {
 }
 
 document
-  .getElementById('updateSettings')!
+  .querySelector('.btn-update')!
   .addEventListener('click', updateSettings);
 
 // 터치 시작

@@ -219,20 +219,19 @@
   .control-group {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: 0.6rem;
   }
   .button-wrapper {
     display: flex;
     justify-content: center;
     width: 100%;
   }
-
   .btn-update {
-    padding: 0.4rem;
+    padding: 0.5rem;
     font-size: 12px;
   }
   .input-number {
-    width: 100px;
+    width: 150px;
   }
 
   .play-pause-btn {
@@ -247,6 +246,5 @@
 
   .label {
     font-size: 12px;
-    padding-right: 6px;
   }
 }
