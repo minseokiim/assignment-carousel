@@ -112,12 +112,27 @@ function updateSettings(): void {
     'slideInterval',
   ) as HTMLInputElement;
 
+  const errorMessage = document.getElementById('error-message') as HTMLElement;
+
   const newSpeed = parseInt(speedInput.value);
   const newInterval = parseInt(intervalInput.value);
 
   if (newSpeed === slideSpeed && newInterval === slideGap) {
     alert('변경된 값이 없습니다. 속도 또는 간격을 변경해 주세요.');
     return;
+  }
+
+  if (
+    isNaN(newSpeed) ||
+    isNaN(newInterval) ||
+    newSpeed === 0 ||
+    newInterval === 0
+  ) {
+    errorMessage.classList.add('error-message');
+    errorMessage.style.display = 'block';
+    return;
+  } else {
+    errorMessage.style.display = 'none';
   }
 
   slideSpeed = newSpeed;

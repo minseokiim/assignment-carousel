@@ -59,7 +59,6 @@
           step="10"
         />
       </div>
-
       <div class="control-group">
         <label class="label" for="slideInterval">간격(ms) :</label>
         <input
@@ -71,8 +70,10 @@
           step="100"
         />
       </div>
-
       <button class="btn-update" id="updateSettings">적용</button>
+      <p id="error-message" class="error-message">
+        ⚠️ 0이 아닌 숫자만 입력 가능합니다.
+      </p>
     </div>
 
     <script type="module" src="./src/scripts/carousel.ts"></script>
