@@ -127,10 +127,11 @@ let slideGap: number = 3000; // 자동 재생 간격
 
 ```
 
-#### 3. 슬라이드 이동 및 인디케이터 업데이트
+#### 3. 슬라이드 이동
 
 `moveSlide()`함수를 통해 인덱스에 따라 슬라이드를 이동시키고, ` updateIndicators()` 함수를 호출하여 현재 슬라이드에 해당하는 인디케이터를 업데이트 했습니다.
-`slides.length` 를 사용하여 마지막 슬라이드에서 첫 번째 슬라이드로 원형 이동이 가능하도록 구현했습니다.
+자동으로 다음 슬라이드로 넘어가며,`slides.length` 를 사용하여 마지막 슬라이드에서 첫 번째 슬라이드로 이동이 가능하도록 구현했습니다.
+기본 값으로, 자동 재생되는 속도는 1000ms이며, 슬라이드 간격은 3000ms로 설정되어 있습니다.
 
 ```
 
@@ -151,12 +152,6 @@ const track = document.querySelector(
 updateIndicators();
 }
 
-// 인디케이터 업데이트
-function updateIndicators(): void {
-indicators.forEach((indicator, index) => {
-indicator.classList.toggle('active', index === currentSlide);
-});
-}
 
 ```
 
@@ -203,11 +198,21 @@ prevBtn?.addEventListener('click', () => {
 });
 ```
 
-#### 6. 인디케이터 클릭 이벤트
+#### 6. 인디케이터
 
+`updateIndicators()`를 통해 현재 활성 슬라이드를 알 수 있습니다.
 인디케이터를 클릭하면 해당 슬라이드로 이동하도록 `addEventListener`로 이벤트 리스너를 추가했습니다. 인디케이터 클릭 시 자동 재생이 멈추고 다시 시작됩니다.
 
 ```
+// 인디케이터 업데이트
+function updateIndicators(): void {
+indicators.forEach((indicator, index) => {
+indicator.classList.toggle('active', index === currentSlide);
+});
+}
+
+..
+
 // 인디케이터 클릭 시 슬라이드 이동
 indicators.forEach((indicator) => {
   indicator.addEventListener('click', () => {
@@ -221,7 +226,7 @@ indicators.forEach((indicator) => {
 
 #### 7. 자동 재생 일시정지 및 재개
 
-플레이/일시 정지 버튼 클릭 시 자동 재생 상태를 전환할 수 있도록 `addEventListener`로 이벤트 리스너를 추가합니다. 자동 재생이 재개될 때 버튼 텍스트가 변경됩니다.
+슬라이드 하단의 플레이/일시 정지 버튼 클릭 시 자동 재생 상태를 전환할 수 있습니다. 클릭 될 때마다 버튼 텍스트가 변경됩니다.
 
 ```
 playPauseBtn?.addEventListener('click', () => {
@@ -239,6 +244,7 @@ playPauseBtn?.addEventListener('click', () => {
 #### 8. 슬라이드 속도 및 간격 변경 가능
 
 `updateSettings()`로 슬라이드 속도와 간격을 변경할 수 있는 입력 요소를 추가하고, 이를 통해 사용자가 직접 설정할 수 있도록 했습니다. 설정이 변경되면 `moveSlide()`에서 css에 반영되어 슬라이드가 전환됩니다.
+숫자만 입력할 수 있도록 설정하였으며, 수정하지 않고 적용을 누르는 경우에는 경고창이 뜹니다. 0을 입력하거나 마이너스 값 등의 정상적인 숫자가 아닌 경우에는 경고 문구가 표시됩니다.
 
 ```
 // 슬라이드 속도 및 간격 변경 함수
@@ -248,17 +254,7 @@ function updateSettings(): void {
     'slideInterval',
   ) as HTMLInputElement;
 
-  const newSpeed = parseInt(speedInput.value);
-  const newInterval = parseInt(intervalInput.value);
-
-  if (newSpeed === slideSpeed && newInterval === slideGap) {
-    alert('변경된 값이 없습니다. 속도 또는 간격을 변경해 주세요.');
-    return;
-  }
-
-  slideSpeed = newSpeed;
-  slideGap = newInterval;
-
+...
   stopAutoPlay();
   startAutoPlay();
 }
@@ -289,9 +285,7 @@ track.style.transitionDuration = `${slideSpeed}ms`;
 #### 9. 터치 스크린 장치에서 제스처 인식
 
 터치 스크린 스와이프를 위한 변수 `startX`와 `threshold`를 추가했습니다.
-또, 사용자가 스와이프 제스처를 인식하여 슬라이드를 제어할 수 있도록 이벤트 리스너를 설정했습니다.
-사용자가 터치한 시작 위치와 종료 위치의 차이를 계산하여 스와이프 방향을 결정합니다.
-스와이프 제스처를 인식하기 위해, 사용자가 터치한 시작 위치를 `startX` 에 저장했고, 터치가 종료된 후 시작 위치와 종료 위치의 차이를 `diffX`로 계산합니다.
+사용자가 터치한 시작 위치`startX` 에 저장했고, 종료 위치로 차이를 계산한 `diffX`로 스와이프 방향을 결정합니다.
 
 ```
 let startX: number; // 터치 스크린 스와이프 변수
