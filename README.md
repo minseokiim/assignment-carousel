@@ -1,10 +1,10 @@
 ## ✔️ 소개
 
 프레임워크나 라이브러리 없이
-HTML, CSS, 순수 JavaScript를 사용하여 무한히 반복되는 캐러셀 구현하기
+HTML, CSS, TypeScript를 사용하여 무한히 반복되는 캐러셀 구현하기
 <br/> <br/>
 
-## 💻 미리보기
+## 💻 배포 링크
 
 https://infinite-carousel-pearl.vercel.app/
 <br/>

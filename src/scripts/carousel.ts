@@ -125,8 +125,8 @@ function updateSettings(): void {
   if (
     isNaN(newSpeed) ||
     isNaN(newInterval) ||
-    newSpeed === 0 ||
-    newInterval === 0
+    newSpeed <= 0 ||
+    newInterval <= 0
   ) {
     errorMessage.classList.add('error-message');
     errorMessage.style.display = 'block';
