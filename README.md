@@ -2,11 +2,12 @@
 
 프레임워크나 라이브러리 없이
 HTML, CSS, 순수 JavaScript를 사용하여 무한히 반복되는 캐러셀 구현하기
-<br/>
+<br/> <br/>
 
 ## 💻 미리보기
 
 https://infinite-carousel-pearl.vercel.app/
+<br/>
 <br/>
 
 ## ⭐ 주요 기능
@@ -38,7 +39,7 @@ https://infinite-carousel-pearl.vercel.app/
 - **ESlint** : 정적 코드 분석 도구
 - **Prettier** : 코드 포맷팅으로 코드 스타일 유지
 - **Vercel** : 배포를 통해 미리보기 기능 제공
-  <br/>
+  <br/> <br/>
 
 ## 📰 구조
 
@@ -74,7 +75,7 @@ Infinite-Carousel
 3. 인디케이터로 현재 슬라이드를 알 수 있습니다.
 4. 인디케이터 눌러서 이동 가능합니다.
 5. 인디케이터 우측에 자동 재생을 멈추고 재개할 수 있는 버튼이 있습니다.
-   <br/>
+   <br/> <br/>
 
 ## 💡 코드 설명
 
@@ -232,7 +233,7 @@ playPauseBtn?.addEventListener('click', () => {
 });
 ```
 
-#### 8. 슬라이드 속도 및 간격 변경 가능:
+#### 8. 슬라이드 속도 및 간격 변경 가능
 
 `updateSettings()`로 슬라이드 속도와 간격을 변경할 수 있는 입력 요소를 추가하고, 이를 통해 사용자가 직접 설정할 수 있도록 했습니다. 설정이 변경되면 `moveSlide()`에서 css에 반영되어 슬라이드가 전환됩니다.
 
