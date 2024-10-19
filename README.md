@@ -38,9 +38,9 @@ Infinite-Carousel
 ├── node_modules/
 ├── public/ : 캐러셀에서 사용한 이미지 저장
 ├── src/
-│ ├── carousel.ts
+│ ├── carousel.ts : 캐러셀 이벤트 처리
 │ ├── style.css : 스타일 정의한 css 파일
-├── index.html : 진입점
+├── index.html : 캐러셀 구조 작성
 ├── vite.config.ts
 ├── package.json
 ├── tsconfig.json

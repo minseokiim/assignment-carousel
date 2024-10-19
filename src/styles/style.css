@@ -43,7 +43,7 @@
 }
 
 .carousel__indicator {
-  width: 0.3rem;
+  width: 0.2rem;
   height: 0.8rem;
   border-radius: 50%;
   background-color: #ccc;
@@ -166,6 +166,7 @@
   position: absolute;
   bottom: 10px;
   right: 1rem;
+  padding: 0;
 }
 
 .play-pause-btn:hover {

@@ -72,12 +72,16 @@ function stopAutoPlay(): void {
 }
 
 // 전/후 버튼
-nextBtn.addEventListener('click', () => {
+nextBtn?.addEventListener('click', () => {
+  stopAutoPlay();
   moveSlide(currentSlide + 1);
+  startAutoPlay();
 });
 
-prevBtn.addEventListener('click', () => {
+prevBtn?.addEventListener('click', () => {
+  stopAutoPlay();
   moveSlide(currentSlide - 1);
+  startAutoPlay();
 });
 
 // 인디케이터 클릭 시 슬라이드 이동
@@ -91,7 +95,7 @@ indicators.forEach((indicator) => {
 });
 
 // 재생/일시정지 버튼 추가 및 기능
-playPauseBtn.addEventListener('click', () => {
+playPauseBtn?.addEventListener('click', () => {
   autoPlay = !autoPlay;
   if (autoPlay) {
     startAutoPlay();
