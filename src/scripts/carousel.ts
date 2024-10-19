@@ -22,6 +22,10 @@ let slideInterval: number | null = null;
 let slideSpeed = 1000; // 슬라이드 간격
 let slideGap = 3000; // 자동 재생 간격
 
+// 터치 스크린 스와이프 변수
+let startX: number;
+const threshold = 50; //최소 거리
+
 // 슬라이드 이동
 function moveSlide(index: number): void {
   currentSlide = (index + slides.length) % slides.length;
@@ -86,10 +90,10 @@ playPauseBtn.addEventListener('click', () => {
   autoPlay = !autoPlay;
   if (autoPlay) {
     startAutoPlay();
-    playPauseBtn.textContent = '자동 재생 정지하려면 클릭!';
+    playPauseBtn.textContent = '❚❚';
   } else {
     stopAutoPlay();
-    playPauseBtn.textContent = '자동 재생 시작하려면 클릭!';
+    playPauseBtn.textContent = '▶';
   }
 });
 
@@ -114,6 +118,38 @@ function updateSettings(): void {
 document
   .getElementById('updateSettings')!
   .addEventListener('click', updateSettings);
+
+// 터치 시작 이벤트
+const trackContainer = document.querySelector(
+  '.carousel__track-container',
+) as HTMLElement;
+
+if (trackContainer) {
+  trackContainer.addEventListener('touchstart', (event: TouchEvent) => {
+    const touch = event.touches[0];
+    startX = touch.clientX;
+  });
+
+  // 터치 이동 이벤트 (스크롤 방지)
+  trackContainer.addEventListener('touchmove', (event: TouchEvent) => {
+    event.preventDefault();
+  });
+
+  // 터치 종료 이벤트
+  trackContainer.addEventListener('touchend', (event: TouchEvent) => {
+    const touch = event.changedTouches[0];
+    const diffX = touch.clientX - startX;
+
+    // 스와이프 인식
+    if (Math.abs(diffX) > threshold) {
+      if (diffX > 0) {
+        moveSlide(currentSlide - 1);
+      } else {
+        moveSlide(currentSlide + 1);
+      }
+    }
+  });
+}
 
 // 초기화
 moveSlide(0);

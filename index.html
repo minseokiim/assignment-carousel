@@ -44,11 +44,12 @@
         <button class="carousel__indicator" data-slide="4"></button>
         <button class="carousel__indicator" data-slide="5"></button>
       </div>
+      <button class="play-pause-btn" aria-label="자동 재생">❚❚</button>
     </div>
 
     <div class="controls">
       <div class="control-group">
-        <label class="label" for="slideSpeed">슬라이드 전환 속도 (ms):</label>
+        <label class="label" for="slideSpeed">전환 속도 (ms):</label>
         <input
           class="input-number"
           type="number"
@@ -60,7 +61,7 @@
       </div>
 
       <div class="control-group">
-        <label class="label" for="slideInterval">슬라이드 간격 (ms):</label>
+        <label class="label" for="slideInterval">간격 (ms):</label>
         <input
           class="input-number"
           type="number"
@@ -71,8 +72,7 @@
         />
       </div>
 
-      <button class="btn-update" id="updateSettings">변경</button>
-      <button class="play-pause-btn">자동 재생 정지하려면 클릭!</button>
+      <button class="btn-update" id="updateSettings">적용</button>
     </div>
 
     <script type="module" src="./src/scripts/carousel.ts"></script>
