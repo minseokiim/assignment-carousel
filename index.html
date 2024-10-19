@@ -45,6 +45,36 @@
         <button class="carousel__indicator" data-slide="5"></button>
       </div>
     </div>
+
+    <div class="controls">
+      <div class="control-group">
+        <label class="label" for="slideSpeed">슬라이드 전환 속도 (ms):</label>
+        <input
+          class="input-number"
+          type="number"
+          id="slideSpeed"
+          value="1000"
+          min="100"
+          step="10"
+        />
+      </div>
+
+      <div class="control-group">
+        <label class="label" for="slideInterval">슬라이드 간격 (ms):</label>
+        <input
+          class="input-number"
+          type="number"
+          id="slideInterval"
+          value="3000"
+          min="100"
+          step="100"
+        />
+      </div>
+
+      <button class="btn-update" id="updateSettings">변경</button>
+      <button class="play-pause-btn">자동 재생 정지하려면 클릭!</button>
+    </div>
+
     <script type="module" src="./src/scripts/carousel.ts"></script>
   </body>
 </html>

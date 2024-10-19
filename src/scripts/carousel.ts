@@ -12,11 +12,15 @@ const nextBtn = document.querySelector(
 const indicators = document.querySelectorAll(
   '.carousel__indicator',
 ) as NodeListOf<HTMLElement>;
+const playPauseBtn = document.querySelector(
+  '.play-pause-btn',
+) as HTMLButtonElement;
 
 let currentSlide = 0;
-let autoPlay = true; //자동재생 여부
+let autoPlay = true;
 let slideInterval: number | null = null;
-const slideSpeed = 1000; // 슬라이드 간격
+let slideSpeed = 1000; // 슬라이드 간격
+let slideGap = 3000; // 자동 재생 간격
 
 // 슬라이드 이동
 function moveSlide(index: number): void {
@@ -29,6 +33,7 @@ function moveSlide(index: number): void {
   const offset = currentSlide * -100;
   const track = document.querySelector('.carousel__track') as HTMLElement;
   track.style.transform = `translateX(${offset}%)`;
+  track.style.transitionDuration = `${slideSpeed}ms`;
 
   updateIndicators();
 }
@@ -43,18 +48,17 @@ function updateIndicators(): void {
 // 슬라이드 자동 전환
 function startAutoPlay(): void {
   if (autoPlay && !slideInterval) {
-    // autoPlay가 true이고 slideInterval이 설정되어 있지 않을 때만
     slideInterval = window.setInterval(() => {
       moveSlide(currentSlide + 1);
-    }, slideSpeed);
+    }, slideGap);
   }
 }
 
 // 자동 재생 멈춤
 function stopAutoPlay(): void {
   if (slideInterval) {
-    clearInterval(slideInterval); // 현재 interval을 정지
-    slideInterval = null; // slideInterval을 null로 설정
+    clearInterval(slideInterval);
+    slideInterval = null;
   }
 }
 
@@ -67,7 +71,7 @@ prevBtn.addEventListener('click', () => {
   moveSlide(currentSlide - 1);
 });
 
-// 인디케이터
+// 인디케이터 클릭 시 슬라이드 이동
 indicators.forEach((indicator) => {
   indicator.addEventListener('click', () => {
     const slideIndex = parseInt(indicator.getAttribute('data-slide')!) - 1;
@@ -77,29 +81,39 @@ indicators.forEach((indicator) => {
   });
 });
 
-// 재생 버튼
-const playPauseBtn = document.createElement('button');
-playPauseBtn.textContent = 'Pause';
-playPauseBtn.classList.add('play-pause-btn');
-document.body.appendChild(playPauseBtn);
-
+// 재생/일시정지 버튼 추가 및 기능
 playPauseBtn.addEventListener('click', () => {
-  // 1. 처음 동작때 autoPlay가 true임
-  // 2. 버튼 클릭시 false됨
-  // 4. 다시 클릭시 true됨
   autoPlay = !autoPlay;
   if (autoPlay) {
-    // 5. 그리고 자동 실행
-    console.log('자동 재생');
-    startAutoPlay(); // 상태가 true일 때 자동 재생 시작
-    playPauseBtn.textContent = 'Pause';
+    startAutoPlay();
+    playPauseBtn.textContent = '자동 재생 정지하려면 클릭!';
   } else {
-    // 3. 그리고 바로 중지
-    console.log('자동 재생 중지');
-    stopAutoPlay(); // 상태가 false일 때 자동 재생 중지
-    playPauseBtn.textContent = 'Play';
+    stopAutoPlay();
+    playPauseBtn.textContent = '자동 재생 시작하려면 클릭!';
   }
 });
+
+// 슬라이드 속도 및 간격 변경 함수
+function updateSettings(): void {
+  const speedInput = document.getElementById('slideSpeed') as HTMLInputElement;
+  const intervalInput = document.getElementById(
+    'slideInterval',
+  ) as HTMLInputElement;
+
+  console.log('변경 전', slideSpeed, slideGap);
+
+  slideSpeed = parseInt(speedInput.value);
+  slideGap = parseInt(intervalInput.value);
+
+  console.log('변경 후', slideSpeed, slideGap);
+
+  stopAutoPlay();
+  startAutoPlay();
+}
+
+document
+  .getElementById('updateSettings')!
+  .addEventListener('click', updateSettings);
 
 // 초기화
 moveSlide(0);
