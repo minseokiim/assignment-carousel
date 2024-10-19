@@ -136,26 +136,38 @@ const trackContainer = document.querySelector(
 ) as HTMLElement;
 
 if (trackContainer) {
-  trackContainer.addEventListener('touchstart', (event: TouchEvent) => {
-    const touch = event.touches[0];
-    startX = touch.clientX;
-  });
+  trackContainer.addEventListener(
+    'touchstart',
+    (event: TouchEvent) => {
+      const touch = event.touches[0];
+      startX = touch.clientX;
+    },
+    { passive: true },
+  );
 
   // 터치 이동
-  trackContainer.addEventListener('touchmove', (event: TouchEvent) => {
-    event.preventDefault();
-  });
+  trackContainer.addEventListener(
+    'touchmove',
+    (event: TouchEvent) => {
+      event.preventDefault();
+    },
+    { passive: false },
+  );
 
   // 터치 종료
-  trackContainer.addEventListener('touchend', (event: TouchEvent) => {
-    const touch = event.changedTouches[0];
-    const diffX = touch.clientX - startX;
+  trackContainer.addEventListener(
+    'touchend',
+    (event: TouchEvent) => {
+      const touch = event.changedTouches[0];
+      const diffX = touch.clientX - startX;
 
-    // 스와이프 인식
-    if (Math.abs(diffX) > threshold) {
-      moveSlide(currentSlide + (diffX > 0 ? -1 : 1));
-    }
-  });
+      // 스와이프 인식
+      if (Math.abs(diffX) > threshold) {
+        moveSlide(currentSlide + (diffX > 0 ? -1 : 1));
+      }
+    },
+    { passive: true },
+  );
 }
 
 // 초기화
