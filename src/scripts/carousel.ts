@@ -16,15 +16,15 @@ const playPauseBtn = document.querySelector(
   '.play-pause-btn',
 ) as HTMLButtonElement;
 
-let currentSlide = 0;
-let autoPlay = true;
+let currentSlide: number = 0;
+let autoPlay: boolean = true;
 let slideInterval: number | null = null;
-let slideSpeed = 1000; // 슬라이드 간격
-let slideGap = 3000; // 자동 재생 간격
+let slideSpeed: number = 1000; // 슬라이드 간격
+let slideGap: number = 3000; // 자동 재생 간격
 
 // 터치 스크린 스와이프 변수
 let startX: number;
-const threshold = 50; //최소 거리
+const threshold: number = 50; //최소 거리
 
 // 슬라이드 이동
 function moveSlide(index: number): void {
@@ -34,10 +34,15 @@ function moveSlide(index: number): void {
     slide.classList.toggle('current-slide', idx === currentSlide);
   });
 
-  const offset = currentSlide * -100;
-  const track = document.querySelector('.carousel__track') as HTMLElement;
-  track.style.transform = `translateX(${offset}%)`;
-  track.style.transitionDuration = `${slideSpeed}ms`;
+  const offset: number = currentSlide * -100;
+  const track = document.querySelector(
+    '.carousel__track',
+  ) as HTMLElement | null;
+
+  if (track) {
+    track.style.transform = `translateX(${offset}%)`;
+    track.style.transitionDuration = `${slideSpeed}ms`;
+  }
 
   updateIndicators();
 }
@@ -104,12 +109,18 @@ function updateSettings(): void {
     'slideInterval',
   ) as HTMLInputElement;
 
-  console.log('변경 전', slideSpeed, slideGap);
+  const newSpeed = parseInt(speedInput.value);
+  const newInterval = parseInt(intervalInput.value);
 
-  slideSpeed = parseInt(speedInput.value);
-  slideGap = parseInt(intervalInput.value);
+  if (newSpeed === slideSpeed && newInterval === slideGap) {
+    alert('변경된 값이 없습니다. 속도 또는 간격을 변경해 주세요.');
+    return;
+  }
 
-  console.log('변경 후', slideSpeed, slideGap);
+  slideSpeed = newSpeed;
+  slideGap = newInterval;
+
+  console.log(slideSpeed, slideGap);
 
   stopAutoPlay();
   startAutoPlay();
@@ -119,7 +130,7 @@ document
   .getElementById('updateSettings')!
   .addEventListener('click', updateSettings);
 
-// 터치 시작 이벤트
+// 터치 시작
 const trackContainer = document.querySelector(
   '.carousel__track-container',
 ) as HTMLElement;
@@ -130,23 +141,19 @@ if (trackContainer) {
     startX = touch.clientX;
   });
 
-  // 터치 이동 이벤트 (스크롤 방지)
+  // 터치 이동
   trackContainer.addEventListener('touchmove', (event: TouchEvent) => {
     event.preventDefault();
   });
 
-  // 터치 종료 이벤트
+  // 터치 종료
   trackContainer.addEventListener('touchend', (event: TouchEvent) => {
     const touch = event.changedTouches[0];
     const diffX = touch.clientX - startX;
 
     // 스와이프 인식
     if (Math.abs(diffX) > threshold) {
-      if (diffX > 0) {
-        moveSlide(currentSlide - 1);
-      } else {
-        moveSlide(currentSlide + 1);
-      }
+      moveSlide(currentSlide + (diffX > 0 ? -1 : 1));
     }
   });
 }
