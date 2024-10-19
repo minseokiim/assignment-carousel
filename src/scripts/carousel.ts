@@ -22,9 +22,8 @@ let slideInterval: number | null = null;
 let slideSpeed: number = 1000; // 슬라이드 간격
 let slideGap: number = 3000; // 자동 재생 간격
 
-// 터치 스크린 스와이프 변수
-let startX: number;
-const threshold: number = 50; //최소 거리
+let startX: number; // 터치 스크린 스와이프 변수
+const threshold: number = 50; // 스와이프를 인식하기 위한 최소 이동 거리
 
 // 슬라이드 이동
 function moveSlide(index: number): void {
@@ -94,7 +93,7 @@ indicators.forEach((indicator) => {
   });
 });
 
-// 재생/일시정지 버튼 추가 및 기능
+// 재생/일시정지 기능
 playPauseBtn?.addEventListener('click', () => {
   autoPlay = !autoPlay;
   if (autoPlay) {
@@ -123,8 +122,6 @@ function updateSettings(): void {
 
   slideSpeed = newSpeed;
   slideGap = newInterval;
-
-  console.log(slideSpeed, slideGap);
 
   stopAutoPlay();
   startAutoPlay();
