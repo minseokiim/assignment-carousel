@@ -82,7 +82,7 @@ function stopAutoPlay(): void {
   }
 }
 
-// 전/후 버튼
+// 이전/다음 슬라이드 이동 버튼
 nextBtn?.addEventListener('click', () => {
   stopAutoPlay();
   moveSlide(currentSlide + 1);
