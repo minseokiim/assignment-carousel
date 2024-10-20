@@ -1,4 +1,6 @@
 import '../styles/style.css';
+import { debounce } from './debounce';
+import { throttle } from './throttle';
 
 const slides = document.querySelectorAll(
   '.carousel__slide',
@@ -15,6 +17,7 @@ const indicators = document.querySelectorAll(
 const playPauseBtn = document.getElementById(
   'play-pause-btn',
 ) as HTMLButtonElement;
+const track = document.getElementById('carousel__track') as HTMLElement | null;
 
 let currentSlide: number = 0;
 let autoPlay: boolean = true;
@@ -33,10 +36,6 @@ function moveSlide(index: number): void {
   slides.forEach((slide, idx) => {
     slide.classList.toggle('current-slide', idx === currentSlide);
   });
-
-  const track = document.getElementById(
-    'carousel__track',
-  ) as HTMLElement | null;
 
   if (track) {
     // 5->1 슬라이드 이동하는 경우
@@ -108,12 +107,17 @@ indicators.forEach((indicator) => {
 // 재생/일시정지 기능
 playPauseBtn?.addEventListener('click', () => {
   autoPlay = !autoPlay;
+
   if (autoPlay) {
     startAutoPlay();
     playPauseBtn.textContent = '❚❚';
+    playPauseBtn.setAttribute('aria-pressed', 'true');
+    playPauseBtn.setAttribute('aria-label', '자동 재생 중');
   } else {
     stopAutoPlay();
     playPauseBtn.textContent = '▶';
+    playPauseBtn.setAttribute('aria-pressed', 'false');
+    playPauseBtn.setAttribute('aria-label', '자동 재생 시작');
   }
 });
 
@@ -153,9 +157,10 @@ function updateSettings(): void {
   startAutoPlay();
 }
 
+// 디바운스 적용
 document
   .getElementById('btn-update')!
-  .addEventListener('click', updateSettings);
+  .addEventListener('click', () => debounce(updateSettings, 300)());
 
 // 터치 시작
 const trackContainer = document.getElementById(
@@ -182,15 +187,18 @@ if (trackContainer) {
   );
 
   // 터치 종료
+  const throttledMoveSlide = throttle((diffX: number) => {
+    moveSlide(currentSlide + (diffX > 0 ? -1 : 1));
+  }, 300);
+
   trackContainer.addEventListener(
     'touchend',
     (event: TouchEvent) => {
       const touch = event.changedTouches[0];
       const diffX = touch.clientX - startX;
 
-      // 스와이프 인식
       if (Math.abs(diffX) > threshold) {
-        moveSlide(currentSlide + (diffX > 0 ? -1 : 1));
+        throttledMoveSlide(diffX);
       }
     },
     { passive: true },
