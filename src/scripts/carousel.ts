@@ -4,10 +4,10 @@ const slides = document.querySelectorAll(
   '.carousel__slide',
 ) as NodeListOf<HTMLElement>;
 const prevBtn = document.querySelector(
-  '.carousel__button--left',
+  '.carousel__btn--left',
 ) as HTMLButtonElement;
 const nextBtn = document.querySelector(
-  '.carousel__button--right',
+  '.carousel__btn--right',
 ) as HTMLButtonElement;
 const indicators = document.querySelectorAll(
   '.carousel__indicator',

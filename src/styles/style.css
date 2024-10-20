@@ -1,5 +1,6 @@
 .carousel {
   position: relative;
+  overflow: hidden;
   width: 100%;
 }
 
@@ -39,8 +40,9 @@
 }
 
 .carousel__indicator {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
+  padding: 0;
   border-radius: 50%;
   background-color: #ccc;
   margin: 0 5px;
@@ -60,12 +62,16 @@
 }
 
 /* 슬라이드 전 후 버튼 */
-.carousel__button {
+.carousel__btn {
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
+  box-sizing: border-box;
+  width: 1rem;
+  height: 1rem;
+  padding: 0;
+  margin: 0;
   border-radius: 50%;
-  padding: 5px 10px;
   font-size: 1rem;
   cursor: pointer;
   transition:
@@ -75,17 +81,20 @@
   top: 50%;
   transform: translateY(-50%);
   z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.carousel__button--left {
+.carousel__btn--left {
   left: 10px;
 }
 
-.carousel__button--right {
+.carousel__btn--right {
   right: 10px;
 }
 
-.carousel__button:hover {
+.carousel__btn:hover {
   background-color: rgba(86, 86, 86, 0.7);
 }
 
@@ -170,18 +179,20 @@
 }
 
 .play-pause-btn:hover {
-  background-color: #373232;
+  background-color: #525252;
 }
 
 /* 반응형 : 패드 */
 @media (max-width: 768px) {
   .carousel__indicator {
     width: 5px;
-    height: 10px;
+    height: 5px;
     margin: 0 3px;
   }
-  .carousel__button {
-    font-size: 0.9rem;
+  .carousel__btn {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
   }
   .input-number {
     width: 100px;
@@ -206,13 +217,14 @@
     height: 20rem;
   }
   .carousel__indicator {
-    width: 4px;
-    height: 4px;
+    width: 5px;
+    height: 5px;
     margin: 0 3px;
-    border-radius: 3px;
   }
-  .carousel__button {
-    font-size: 0.8rem;
+  .carousel__btn {
+    width: 12px;
+    height: 12px;
+    font-size: 12px;
   }
   /* 모바일에서만 두 줄로 설정 */
   .control-group {
@@ -220,7 +232,7 @@
     align-items: flex-start;
     gap: 0.6rem;
   }
-  .button-wrapper {
+  .btn-wrapper {
     display: flex;
     justify-content: center;
     width: 100%;
