@@ -27,20 +27,32 @@ const threshold: number = 50; // 스와이프를 인식하기 위한 최소 이�
 
 // 슬라이드 이동
 function moveSlide(index: number): void {
+  const previousSlide = currentSlide;
   currentSlide = (index + slides.length) % slides.length;
 
   slides.forEach((slide, idx) => {
     slide.classList.toggle('current-slide', idx === currentSlide);
   });
 
-  const offset: number = currentSlide * -100;
   const track = document.querySelector(
     '.carousel__track',
   ) as HTMLElement | null;
 
   if (track) {
-    track.style.transform = `translateX(${offset}%)`;
-    track.style.transitionDuration = `${slideSpeed}ms`;
+    // 5->1 슬라이드 이동하는 경우
+    if (previousSlide === slides.length - 1 && currentSlide === 0) {
+      track.style.transitionDuration = '0ms';
+      track.style.transform = `translateX(${currentSlide * -100}%)`;
+
+      requestAnimationFrame(() => {
+        track.style.transitionDuration = `${slideSpeed}ms`;
+        track.style.transform = `translateX(${currentSlide * -100}%)`;
+      });
+    } else {
+      const offset: number = currentSlide * -100;
+      track.style.transform = `translateX(${offset}%)`;
+      track.style.transitionDuration = `${slideSpeed}ms`;
+    }
   }
 
   updateIndicators();

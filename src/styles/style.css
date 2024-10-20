@@ -96,6 +96,7 @@
 
 .carousel__btn:hover {
   background-color: rgba(86, 86, 86, 0.7);
+  transform: scale(1.2);
 }
 
 /* 속도, 간격 조절 관련*/
