@@ -42,16 +42,13 @@ function moveSlide(index: number, withTransition: boolean = true): void {
 
   isTransitioning = true;
 
-  if (withTransition) {
-    track.style.transitionDuration = `${slideSpeed}ms`;
-  } else {
-    track.style.transitionDuration = '0ms';
-  }
-
   const offset: number = index * -100;
+  track.style.transitionDuration = withTransition ? `${slideSpeed}ms` : '0ms';
   track.style.transform = `translateX(${offset}%)`;
 
   currentSlide = index;
+
+  updateIndicators();
 
   // 마지막 -> 첫 번째
   if (index === slides.length + 1) {
@@ -59,7 +56,6 @@ function moveSlide(index: number, withTransition: boolean = true): void {
       track!.style.transitionDuration = '0ms';
       track!.style.transform = `translateX(-100%)`;
       currentSlide = 1;
-      updateIndicators();
       isTransitioning = false;
     }, slideSpeed);
   }
@@ -69,11 +65,9 @@ function moveSlide(index: number, withTransition: boolean = true): void {
       track!.style.transitionDuration = '0ms';
       track!.style.transform = `translateX(${slides.length * -100}%)`;
       currentSlide = slides.length;
-      updateIndicators();
       isTransitioning = false;
     }, slideSpeed);
   } else {
-    updateIndicators();
     isTransitioning = false;
   }
 }

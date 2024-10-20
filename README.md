@@ -358,6 +358,6 @@ if (trackContainer) {
 첫 번째 슬라이드를 현재 슬라이드로 설정하고, 자동 재생을 시작하는 역할을 합니다.
 
 ```
-moveSlide(0);
+moveSlide(1);
 startAutoPlay();
 ```
