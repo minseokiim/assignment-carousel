@@ -19,7 +19,13 @@ const playPauseBtn = document.getElementById(
 ) as HTMLButtonElement;
 const track = document.getElementById('carousel__track') as HTMLElement | null;
 
-let currentSlide: number = 0;
+// 슬라이드 클론
+const firstSlide = slides[0].cloneNode(true) as HTMLElement;
+const lastSlide = slides[slides.length - 1].cloneNode(true) as HTMLElement;
+track?.appendChild(firstSlide);
+track?.insertBefore(lastSlide, slides[0]);
+
+let currentSlide: number = 1; // 클론을 고려하여 시작 인덱스 조정
 let autoPlay: boolean = true;
 let slideInterval: number | null = null;
 let slideSpeed: number = 1000; // 슬라이드 간격
@@ -29,47 +35,55 @@ let startX: number; // 터치 스크린 스와이프 변수
 const threshold: number = 50; // 스와이프를 인식하기 위한 최소 이동 거리
 
 // 슬라이드 이동
-function moveSlide(index: number): void {
-  const previousSlide = currentSlide;
-  currentSlide = (index + slides.length) % slides.length;
+function moveSlide(index: number, withTransition: boolean = true): void {
+  if (!track) return;
 
-  slides.forEach((slide, idx) => {
-    slide.classList.toggle('current-slide', idx === currentSlide);
-  });
-
-  if (track) {
-    // 5->1 슬라이드 이동하는 경우
-    if (previousSlide === slides.length - 1 && currentSlide === 0) {
-      track.style.transitionDuration = '0ms';
-      track.style.transform = `translateX(${currentSlide * -100}%)`;
-
-      requestAnimationFrame(() => {
-        track.style.transitionDuration = `${slideSpeed}ms`;
-        track.style.transform = `translateX(${currentSlide * -100}%)`;
-      });
-    } // 1->5 슬라이드 이동하는 경우
-    else if (previousSlide === 0 && currentSlide === slides.length - 1) {
-      track.style.transitionDuration = '0ms';
-      track.style.transform = `translateX(${currentSlide * -100}%)`;
-
-      requestAnimationFrame(() => {
-        track.style.transitionDuration = `${slideSpeed}ms`;
-        track.style.transform = `translateX(${currentSlide * -100}%)`;
-      });
-    } else {
-      const offset: number = currentSlide * -100;
-      track.style.transform = `translateX(${offset}%)`;
-      track.style.transitionDuration = `${slideSpeed}ms`;
-    }
+  if (withTransition) {
+    track.style.transitionDuration = `${slideSpeed}ms`;
+  } else {
+    track.style.transitionDuration = '0ms';
   }
 
-  updateIndicators();
+  const offset: number = index * -100;
+  track.style.transform = `translateX(${offset}%)`;
+
+  currentSlide = index;
+
+  // 마지막 -> 첫 번째
+  if (index === slides.length + 1) {
+    setTimeout(() => {
+      track!.style.transitionDuration = '0ms';
+      track!.style.transform = `translateX(-100%)`;
+      currentSlide = 1;
+      updateIndicators();
+    }, slideSpeed);
+  }
+
+  // 첫 번째 -> 마지막
+  if (index === 0) {
+    setTimeout(() => {
+      track!.style.transitionDuration = '0ms';
+      track!.style.transform = `translateX(${slides.length * -100}%)`;
+      currentSlide = slides.length;
+      updateIndicators();
+    }, slideSpeed);
+  } else {
+    updateIndicators();
+  }
 }
 
 // 인디케이터 업데이트
 function updateIndicators(): void {
+  let adjustedIndex = currentSlide - 1;
+
+  if (currentSlide === 0) {
+    adjustedIndex = slides.length - 1;
+  } else if (currentSlide === slides.length + 1) {
+    adjustedIndex = 0;
+  }
+
   indicators.forEach((indicator, index) => {
-    indicator.classList.toggle('active', index === currentSlide);
+    indicator.classList.toggle('active', index === adjustedIndex);
   });
 }
 
@@ -92,23 +106,22 @@ function stopAutoPlay(): void {
 
 // 이전/다음 슬라이드 이동 버튼
 nextBtn?.addEventListener('click', () => {
-  stopAutoPlay();
   moveSlide(currentSlide + 1);
+  stopAutoPlay();
   startAutoPlay();
 });
 
 prevBtn?.addEventListener('click', () => {
-  stopAutoPlay();
   moveSlide(currentSlide - 1);
+  stopAutoPlay();
   startAutoPlay();
 });
 
 // 인디케이터 클릭 시 슬라이드 이동
-indicators.forEach((indicator) => {
+indicators.forEach((indicator, idx) => {
   indicator.addEventListener('click', () => {
-    const slideIndex = parseInt(indicator.getAttribute('data-slide')!) - 1;
-    moveSlide(slideIndex);
     stopAutoPlay();
+    moveSlide(idx + 1);
     startAutoPlay();
   });
 });
@@ -215,5 +228,5 @@ if (trackContainer) {
 }
 
 // 초기화
-moveSlide(0);
+moveSlide(1);
 startAutoPlay();

@@ -135,22 +135,35 @@ let slideGap: number = 3000; // 자동 재생 간격
 슬라이드 전환 속도와 간격을 기본값(1000ms, 3000ms)으로 설정하고, `moveSlide()` 함수를 통해 인덱스에 따라 슬라이드를 이동시키며, 현재 슬라이드에 해당하는 인디케이터를 업데이트합니다.
 
 ```
+// 슬라이드 클론
+const firstSlide = slides[0].cloneNode(true) as HTMLElement;
+const lastSlide = slides[slides.length - 1].cloneNode(true) as HTMLElement;
+track?.appendChild(firstSlide);
+track?.insertBefore(lastSlide, slides[0]);
+..
 
 // 슬라이드 이동
 function moveSlide(index: number): void {
   const previousSlide = currentSlide;
-  currentSlide = (index + slides.length) % slides.length;
-
-  slides.forEach((slide, idx) => {
-    slide.classList.toggle('current-slide', idx === currentSlide);
-  });
+..
 
 ...
- if (track) {
-    if (previousSlide === slides.length - 1 && currentSlide === 0) {
-     ..
+  if (track) {
+    if (previousSlide === 0 && currentSlide === slides.length) {
+      // 1 -> 5 이동
+      track.style.transitionDuration = '0ms';
+      track.style.transform = `translateX(${-100}%)`;
       requestAnimationFrame(() => {
-       ..
+        track.style.transitionDuration = `${slideSpeed}ms`;
+        track.style.transform = `translateX(${-currentSlide * 100}%)`;
+      });
+    } else if (previousSlide === slides.length && currentSlide === 1) {
+      // 5 -> 1 이동
+      track.style.transitionDuration = '0ms';
+      track.style.transform = `translateX(${-currentSlide * 100}%)`;
+      requestAnimationFrame(() => {
+        track.style.transitionDuration = `${slideSpeed}ms`;
+        track.style.transform = `translateX(-100%)`;
       });
     } else {
       const offset: number = currentSlide * -100;
@@ -158,7 +171,12 @@ function moveSlide(index: number): void {
       track.style.transitionDuration = `${slideSpeed}ms`;
     }
   }
-updateIndicators();
+
+  slides.forEach((slide, idx) => {
+    slide.classList.toggle('current-slide', idx === currentSlide);
+  });
+
+  updateIndicators();
 }
 
 
@@ -215,9 +233,10 @@ prevBtn?.addEventListener('click', () => {
 ```
 // 인디케이터 업데이트
 function updateIndicators(): void {
-indicators.forEach((indicator, index) => {
-indicator.classList.toggle('active', index === currentSlide);
-});
+   const adjustedIndex = (currentSlide - 1 + slides.length) % slides.length;
+  indicators.forEach((indicator, index) => {
+    indicator.classList.toggle('active', index === adjustedIndex);
+  });
 }
 
 ..
@@ -226,7 +245,7 @@ indicator.classList.toggle('active', index === currentSlide);
 indicators.forEach((indicator) => {
   indicator.addEventListener('click', () => {
     const slideIndex = parseInt(indicator.getAttribute('data-slide')!) - 1;
-    moveSlide(slideIndex);
+    moveSlide(slideIndex + 1);
     ..
   });
 });

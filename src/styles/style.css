@@ -190,11 +190,6 @@
     height: 5px;
     margin: 0 3px;
   }
-  .carousel__btn {
-    font-size: 14px;
-    width: 14px;
-    height: 14px;
-  }
   .input-number {
     width: 100px;
   }
@@ -223,9 +218,9 @@
     margin: 0 3px;
   }
   .carousel__btn {
-    width: 12px;
-    height: 12px;
-    font-size: 12px;
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
   }
   /* 모바일에서만 두 줄로 설정 */
   #control-group {
@@ -245,17 +240,14 @@
   .input-number {
     width: 150px;
   }
-
   #play-pause-btn {
     width: 20px;
     height: 20px;
     font-size: 10px;
   }
-
   .error-message {
     font-size: 12px;
   }
-
   .label {
     font-size: 12px;
   }
