@@ -143,40 +143,15 @@ track?.insertBefore(lastSlide, slides[0]);
 ..
 
 // 슬라이드 이동
-function moveSlide(index: number): void {
-  const previousSlide = currentSlide;
-..
-
-...
-  if (track) {
-    if (previousSlide === 0 && currentSlide === slides.length) {
-      // 1 -> 5 이동
-      track.style.transitionDuration = '0ms';
-      track.style.transform = `translateX(${-100}%)`;
-      requestAnimationFrame(() => {
-        track.style.transitionDuration = `${slideSpeed}ms`;
-        track.style.transform = `translateX(${-currentSlide * 100}%)`;
-      });
-    } else if (previousSlide === slides.length && currentSlide === 1) {
-      // 5 -> 1 이동
-      track.style.transitionDuration = '0ms';
-      track.style.transform = `translateX(${-currentSlide * 100}%)`;
-      requestAnimationFrame(() => {
-        track.style.transitionDuration = `${slideSpeed}ms`;
-        track.style.transform = `translateX(-100%)`;
-      });
-    } else {
-      const offset: number = currentSlide * -100;
-      track.style.transform = `translateX(${offset}%)`;
-      track.style.transitionDuration = `${slideSpeed}ms`;
-    }
+function moveSlide(index: number, withTransition: boolean = true): void {
+  if (!track) return;
+ if (withTransition) {
+    track.style.transitionDuration = `${slideSpeed}ms`;
+  } else {
+    track.style.transitionDuration = '0ms';
   }
+  ..
 
-  slides.forEach((slide, idx) => {
-    slide.classList.toggle('current-slide', idx === currentSlide);
-  });
-
-  updateIndicators();
 }
 
 
@@ -233,8 +208,9 @@ prevBtn?.addEventListener('click', () => {
 ```
 // 인디케이터 업데이트
 function updateIndicators(): void {
-   const adjustedIndex = (currentSlide - 1 + slides.length) % slides.length;
-  indicators.forEach((indicator, index) => {
+let adjustedIndex = currentSlide - 1;
+...
+indicators.forEach((indicator, index) => {
     indicator.classList.toggle('active', index === adjustedIndex);
   });
 }
@@ -242,11 +218,11 @@ function updateIndicators(): void {
 ..
 
 // 인디케이터 클릭 시 슬라이드 이동
-indicators.forEach((indicator) => {
+indicators.forEach((indicator, idx) => {
   indicator.addEventListener('click', () => {
-    const slideIndex = parseInt(indicator.getAttribute('data-slide')!) - 1;
-    moveSlide(slideIndex + 1);
-    ..
+    stopAutoPlay();
+    moveSlide(idx + 1);
+    startAutoPlay();
   });
 });
 ```
