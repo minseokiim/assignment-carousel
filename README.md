@@ -89,10 +89,10 @@ Infinite-Carousel
 
 ```
 // index.html
- <div class="carousel">
+ <div id="carousel">
       <!-- 캐러셀 슬라이드 이미지 -->
-      <div class="carousel__track-container">
-        <ul class="carousel__track">
+      <div id="carousel__track-container">
+        <ul id="carousel__track">
           <li class="carousel__slide current-slide">
             <img src="/first.png" alt="Slide 1" />
           </li>
@@ -114,7 +114,7 @@ Infinite-Carousel
 
 // carousel.ts
 const slides = document.querySelectorAll(
-'.carousel\_\_slide',
+  '.carousel__slide',
 ) as NodeListOf<HTMLElement>;
 
 ...
@@ -137,18 +137,26 @@ let slideGap: number = 3000; // 자동 재생 간격
 
 // 슬라이드 이동
 function moveSlide(index: number): void {
-currentSlide = (index + slides.length) % slides.length;
+  const previousSlide = currentSlide;
+  currentSlide = (index + slides.length) % slides.length;
 
-slides.forEach((slide, idx) => {
-slide.classList.toggle('current-slide', idx === currentSlide);
-});
-
-const offset: number = currentSlide \* -100;
-const track = document.querySelector(
-'.carousel\_\_track',
-) as HTMLElement | null;
+  slides.forEach((slide, idx) => {
+    slide.classList.toggle('current-slide', idx === currentSlide);
+  });
 
 ...
+ if (track) {
+    if (previousSlide === slides.length - 1 && currentSlide === 0) {
+     ..
+      requestAnimationFrame(() => {
+       ..
+      });
+    } else {
+      const offset: number = currentSlide * -100;
+      track.style.transform = `translateX(${offset}%)`;
+      track.style.transitionDuration = `${slideSpeed}ms`;
+    }
+  }
 updateIndicators();
 }
 
@@ -179,7 +187,7 @@ function stopAutoPlay(): void {
 }
 ```
 
-#### 5. 이전/다음 버튼 기능
+#### 5. 이전/다음 슬라이드 이동 버튼
 
 사용자가 이전 또는 다음 버튼을 클릭할 때 슬라이드를 전환할 수 있도록 `addEventListener`로 이벤트 리스너를 추가했습니다. 버튼 클릭 시 자동 재생이 멈추고 슬라이드 이동 후 다시 자동 재생을 시작합니다.
 
@@ -218,8 +226,7 @@ indicators.forEach((indicator) => {
   indicator.addEventListener('click', () => {
     const slideIndex = parseInt(indicator.getAttribute('data-slide')!) - 1;
     moveSlide(slideIndex);
-    stopAutoPlay();
-    startAutoPlay();
+    ..
   });
 });
 ```
@@ -254,29 +261,33 @@ function updateSettings(): void {
     'slideInterval',
   ) as HTMLInputElement;
 
-...
+  const newSpeed = parseInt(speedInput.value);
+  const newInterval = parseInt(intervalInput.value);
+
+    ...
+  slideSpeed = newSpeed;
+  slideGap = newInterval;
+
   stopAutoPlay();
   startAutoPlay();
+
 }
 ...
 document
-  .getElementById('updateSettings')!
+  .getElementById('btn-update')!
   .addEventListener('click', updateSettings);
 
 // 변경된 값 반영
 function moveSlide(index: number): void {
 ...
 if (track) {
-track.style.transform = `translateX(${offset}%)`;
-track.style.transitionDuration = `${slideSpeed}ms`;
-}
+  ..
+} else {
+      const offset: number = currentSlide * -100;
+      track.style.transform = `translateX(${offset}%)`;
+      track.style.transitionDuration = `${slideSpeed}ms`;
+    }
 ...
-}
-
-// style.css
-.carousel__track {
-  transition: transform var(--transition-duration, 0.1s) ease;
-..
 }
 
 
