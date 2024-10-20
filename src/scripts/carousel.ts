@@ -3,17 +3,17 @@ import '../styles/style.css';
 const slides = document.querySelectorAll(
   '.carousel__slide',
 ) as NodeListOf<HTMLElement>;
-const prevBtn = document.querySelector(
-  '.carousel__btn--left',
+const prevBtn = document.getElementById(
+  'carousel__btn--left',
 ) as HTMLButtonElement;
-const nextBtn = document.querySelector(
-  '.carousel__btn--right',
+const nextBtn = document.getElementById(
+  'carousel__btn--right',
 ) as HTMLButtonElement;
 const indicators = document.querySelectorAll(
   '.carousel__indicator',
 ) as NodeListOf<HTMLElement>;
-const playPauseBtn = document.querySelector(
-  '.play-pause-btn',
+const playPauseBtn = document.getElementById(
+  'play-pause-btn',
 ) as HTMLButtonElement;
 
 let currentSlide: number = 0;
@@ -34,8 +34,8 @@ function moveSlide(index: number): void {
     slide.classList.toggle('current-slide', idx === currentSlide);
   });
 
-  const track = document.querySelector(
-    '.carousel__track',
+  const track = document.getElementById(
+    'carousel__track',
   ) as HTMLElement | null;
 
   if (track) {
@@ -123,7 +123,7 @@ function updateSettings(): void {
   const intervalInput = document.getElementById(
     'slideInterval',
   ) as HTMLInputElement;
-  const errorMessage = document.querySelector('.error-message') as HTMLElement;
+  const errorMessage = document.getElementById('error-message') as HTMLElement;
 
   const newSpeed = parseInt(speedInput.value);
   const newInterval = parseInt(intervalInput.value);
@@ -154,12 +154,12 @@ function updateSettings(): void {
 }
 
 document
-  .querySelector('.btn-update')!
+  .getElementById('btn-update')!
   .addEventListener('click', updateSettings);
 
 // 터치 시작
-const trackContainer = document.querySelector(
-  '.carousel__track-container',
+const trackContainer = document.getElementById(
+  'carousel__track-container',
 ) as HTMLElement;
 
 if (trackContainer) {

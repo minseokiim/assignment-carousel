@@ -1,14 +1,14 @@
-.carousel {
+#carousel {
   position: relative;
   overflow: hidden;
   width: 100%;
 }
 
-.carousel__track-container {
+#carousel__track-container {
   width: 100%;
 }
 
-.carousel__track {
+#carousel__track {
   display: flex;
   transition: transform var(--transition-duration, 0.1s) ease;
   list-style-type: none;
@@ -30,7 +30,7 @@
 }
 
 /* 인디케이터 */
-.carousel__nav {
+#carousel__nav {
   position: absolute;
   bottom: 10px;
   left: 50%;
@@ -86,11 +86,11 @@
   align-items: center;
 }
 
-.carousel__btn--left {
+#carousel__btn--left {
   left: 10px;
 }
 
-.carousel__btn--right {
+#carousel__btn--right {
   right: 10px;
 }
 
@@ -100,7 +100,7 @@
 }
 
 /* 속도, 간격 조절 관련*/
-.controls {
+#controls {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -108,7 +108,7 @@
   margin: 30px auto;
 }
 
-.control-group {
+#control-group {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -125,7 +125,7 @@
   padding-right: 8px;
 }
 
-.error-message {
+#error-message {
   color: red;
   display: none;
   margin-top: 10px;
@@ -144,7 +144,7 @@
   border-color: #000;
 }
 
-.btn-update {
+#btn-update {
   padding: 0.5rem 1rem;
   background-color: #000;
   color: white;
@@ -156,12 +156,12 @@
   white-space: nowrap;
 }
 
-.btn-update:hover {
+#btn-update:hover {
   background-color: #333;
 }
 
 /* 자동 재생 버튼 */
-.play-pause-btn {
+#play-pause-btn {
   cursor: pointer;
   background-color: rgb(0, 0, 0);
   color: white;
@@ -179,7 +179,7 @@
   right: 10px;
 }
 
-.play-pause-btn:hover {
+#play-pause-btn:hover {
   background-color: #525252;
 }
 
@@ -198,7 +198,7 @@
   .input-number {
     width: 100px;
   }
-  .play-pause-btn {
+  #play-pause-btn {
     width: 25px;
     height: 25px;
     font-size: 14px;
@@ -206,7 +206,7 @@
   .label {
     padding-right: 6px;
   }
-  .btn-update {
+  #btn-update {
     padding: 0.5rem;
     font-size: 14px;
   }
@@ -228,17 +228,17 @@
     font-size: 12px;
   }
   /* 모바일에서만 두 줄로 설정 */
-  .control-group {
+  #control-group {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.6rem;
   }
-  .btn-wrapper {
+  #btn-wrapper {
     display: flex;
     justify-content: center;
     width: 100%;
   }
-  .btn-update {
+  #btn-update {
     padding: 0.5rem;
     font-size: 12px;
   }
@@ -246,7 +246,7 @@
     width: 150px;
   }
 
-  .play-pause-btn {
+  #play-pause-btn {
     width: 20px;
     height: 20px;
     font-size: 10px;
