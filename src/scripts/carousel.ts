@@ -47,6 +47,15 @@ function moveSlide(index: number): void {
         track.style.transitionDuration = `${slideSpeed}ms`;
         track.style.transform = `translateX(${currentSlide * -100}%)`;
       });
+    } // 1->5 슬라이드 이동하는 경우
+    else if (previousSlide === 0 && currentSlide === slides.length - 1) {
+      track.style.transitionDuration = '0ms';
+      track.style.transform = `translateX(${currentSlide * -100}%)`;
+
+      requestAnimationFrame(() => {
+        track.style.transitionDuration = `${slideSpeed}ms`;
+        track.style.transform = `translateX(${currentSlide * -100}%)`;
+      });
     } else {
       const offset: number = currentSlide * -100;
       track.style.transform = `translateX(${offset}%)`;

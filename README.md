@@ -48,11 +48,15 @@ https://infinite-carousel-pearl.vercel.app/
 ```
 Infinite-Carousel
 ├── node_modules/
-├── public/ : 캐러셀에서 사용한 이미지 저장
+├── public/                # 캐러셀에서 사용한 이미지 저장
 ├── src/
-│ ├── carousel.ts : 캐러셀 이벤트 처리
-│ ├── style.css : 스타일 정의한 css 파일
-├── index.html : 캐러셀 구조 작성
+│   ├── scripts/
+│   │   ├── carousel.ts    # 메인 캐러셀 기능 구현
+│   │   ├── debounce.ts    # 디바운스 함수 정의
+│   │   └──  throttle.ts     # 쓰로틀링 함수 정의
+│   ├── styles/            # 스타일 정의한 css 파일
+│   │   └── style.css
+├── index.html             # 캐러셀 구조 작성
 ├── vite.config.ts
 ├── package.json
 ├── tsconfig.json
@@ -249,6 +253,7 @@ playPauseBtn?.addEventListener('click', () => {
 
 `updateSettings()`로 슬라이드 속도와 간격을 변경할 수 있는 입력 요소를 추가하고, 이를 통해 사용자가 직접 설정할 수 있도록 했습니다. 설정이 변경되면 `moveSlide()`에서 css에 반영되어 슬라이드가 전환됩니다.
 숫자만 입력할 수 있도록 설정하였으며, 수정하지 않고 적용을 누르는 경우에는 경고창이 뜹니다. 0을 입력하거나 마이너스 값 등의 정상적인 숫자가 아닌 경우에는 경고 문구가 표시됩니다.
+디바운스를 적용하여, 사용자가 설정을 변경하는 동안 불필요한 호출을 방지하였습니다.
 
 ```
 // 슬라이드 속도 및 간격 변경 함수
@@ -270,9 +275,10 @@ function updateSettings(): void {
 
 }
 ...
+// 디바운스 적용
 document
   .getElementById('btn-update')!
-  .addEventListener('click', updateSettings);
+  .addEventListener('click', () => debounce(updateSettings, 300)());
 
 // 변경된 값 반영
 function moveSlide(index: number): void {
@@ -294,6 +300,7 @@ if (track) {
 
 터치 스크린 스와이프를 위한 변수 `startX`와 `threshold`를 추가했습니다.
 사용자가 터치한 시작 위치`startX` 에 저장했고, 종료 위치로 차이를 계산한 `diffX`로 스와이프 방향을 결정합니다.
+터치 이벤트 처리에 쓰로틀링을 추가하여, 스와이프 인식 시 과도한 호출을 방지했습니다.
 
 ```
 let startX: number; // 터치 스크린 스와이프 변수
@@ -324,16 +331,19 @@ if (trackContainer) {
     { passive: false },
   );
 
-  // 터치 종료
+  // 터치 종료 -> 쓰로틀링 추가
+  const throttledMoveSlide = throttle((diffX: number) => {
+    moveSlide(currentSlide + (diffX > 0 ? -1 : 1));
+  }, 300);
+
   trackContainer.addEventListener(
     'touchend',
     (event: TouchEvent) => {
       const touch = event.changedTouches[0];
       const diffX = touch.clientX - startX;
 
-      // 스와이프 인식
       if (Math.abs(diffX) > threshold) {
-        moveSlide(currentSlide + (diffX > 0 ? -1 : 1));
+        throttledMoveSlide(diffX);
       }
     },
     { passive: true },
