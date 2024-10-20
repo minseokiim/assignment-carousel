@@ -53,7 +53,7 @@ Infinite-Carousel
 │   ├── scripts/
 │   │   ├── carousel.ts    # 메인 캐러셀 기능 구현
 │   │   ├── debounce.ts    # 디바운스 함수 정의
-│   │   └──  throttle.ts     # 쓰로틀링 함수 정의
+│   │   └── throttle.ts     # 쓰로틀링 함수 정의
 │   ├── styles/            # 스타일 정의한 css 파일
 │   │   └── style.css
 ├── index.html             # 캐러셀 구조 작성
@@ -235,16 +235,22 @@ indicators.forEach((indicator) => {
 #### 7. 자동 재생 일시정지 및 재개
 
 슬라이드 하단의 플레이/일시 정지 버튼 클릭 시 자동 재생 상태를 전환할 수 있습니다. 클릭 될 때마다 버튼 텍스트가 변경됩니다.
+접근성을 위해 `aria-pressed` 속성과 `aria-label`을 추가하였습니다.
 
 ```
 playPauseBtn?.addEventListener('click', () => {
   autoPlay = !autoPlay;
+
   if (autoPlay) {
     startAutoPlay();
     playPauseBtn.textContent = '❚❚';
+    playPauseBtn.setAttribute('aria-pressed', 'true');
+    playPauseBtn.setAttribute('aria-label', '자동 재생 중');
   } else {
     stopAutoPlay();
     playPauseBtn.textContent = '▶';
+    playPauseBtn.setAttribute('aria-pressed', 'false');
+    playPauseBtn.setAttribute('aria-label', '자동 재생 시작');
   }
 });
 ```
