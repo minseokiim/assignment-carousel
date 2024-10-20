@@ -25,7 +25,7 @@ const lastSlide = slides[slides.length - 1].cloneNode(true) as HTMLElement;
 track?.appendChild(firstSlide);
 track?.insertBefore(lastSlide, slides[0]);
 
-let currentSlide: number = 1; // 클론을 고려하여 시작 인덱스 조정
+let currentSlide: number = 1;
 let autoPlay: boolean = true;
 let slideInterval: number | null = null;
 let slideSpeed: number = 1000; // 슬라이드 간격
@@ -33,59 +33,61 @@ let slideGap: number = 3000; // 자동 재생 간격
 
 let startX: number; // 터치 스크린 스와이프 변수
 const threshold: number = 50; // 스와이프를 인식하기 위한 최소 이동 거리
-let isTransitioning = false; // 슬라이드 이동 중인지 확인
+
+let isTransitioning = false; // 슬라이드 전환 체크
 
 // 슬라이드 이동
-function moveSlide(index: number): void {
-  if (isTransitioning) return;
+function moveSlide(index: number, withTransition: boolean = true): void {
+  if (!track || isTransitioning) return;
+
   isTransitioning = true;
 
-  const previousSlide = currentSlide;
-
-  if (index < 0) {
-    currentSlide = slides.length;
-  } else if (index > slides.length + 1) {
-    currentSlide = 1;
+  if (withTransition) {
+    track.style.transitionDuration = `${slideSpeed}ms`;
   } else {
-    currentSlide = index;
+    track.style.transitionDuration = '0ms';
   }
 
-  if (track) {
-    // 마지막 -> 첫 번째
-    if (previousSlide === slides.length && currentSlide === 1) {
-      track.style.transitionDuration = '0ms';
-      track.style.transform = `translateX(${-(slides.length + 1) * 100}%)`;
+  const offset: number = index * -100;
+  track.style.transform = `translateX(${offset}%)`;
 
-      requestAnimationFrame(() => {
-        track.style.transitionDuration = `${slideSpeed}ms`;
-        track.style.transform = `translateX(-100%)`;
-      });
-    }
-    // 첫 번째 -> 마지막
-    else if (previousSlide === 1 && currentSlide === slides.length) {
-      track.style.transitionDuration = '0ms';
-      track.style.transform = `translateX(0%)`;
+  currentSlide = index;
 
-      requestAnimationFrame(() => {
-        track.style.transitionDuration = `${slideSpeed}ms`;
-        track.style.transform = `translateX(-${slides.length * 100}%)`;
-      });
-    } else {
-      track.style.transitionDuration = `${slideSpeed}ms`;
-      track.style.transform = `translateX(${-currentSlide * 100}%)`;
-    }
-
+  // 마지막 -> 첫 번째
+  if (index === slides.length + 1) {
     setTimeout(() => {
+      track!.style.transitionDuration = '0ms';
+      track!.style.transform = `translateX(-100%)`;
+      currentSlide = 1;
+      updateIndicators();
       isTransitioning = false;
     }, slideSpeed);
   }
-
-  updateIndicators();
+  // 첫 번째 -> 마지막
+  else if (index === 0) {
+    setTimeout(() => {
+      track!.style.transitionDuration = '0ms';
+      track!.style.transform = `translateX(${slides.length * -100}%)`;
+      currentSlide = slides.length;
+      updateIndicators();
+      isTransitioning = false;
+    }, slideSpeed);
+  } else {
+    updateIndicators();
+    isTransitioning = false;
+  }
 }
 
 // 인디케이터 업데이트
 function updateIndicators(): void {
-  const adjustedIndex = (currentSlide - 1 + slides.length) % slides.length;
+  let adjustedIndex = currentSlide - 1;
+
+  if (currentSlide === 0) {
+    adjustedIndex = slides.length - 1;
+  } else if (currentSlide === slides.length + 1) {
+    adjustedIndex = 0;
+  }
+
   indicators.forEach((indicator, index) => {
     indicator.classList.toggle('active', index === adjustedIndex);
   });
@@ -122,11 +124,10 @@ prevBtn?.addEventListener('click', () => {
 });
 
 // 인디케이터 클릭 시 슬라이드 이동
-indicators.forEach((indicator) => {
+indicators.forEach((indicator, idx) => {
   indicator.addEventListener('click', () => {
-    const slideIndex = parseInt(indicator.getAttribute('data-slide')!) - 1;
-    moveSlide(slideIndex + 1);
     stopAutoPlay();
+    moveSlide(idx + 1);
     startAutoPlay();
   });
 });
@@ -198,9 +199,9 @@ if (trackContainer) {
   trackContainer.addEventListener(
     'touchstart',
     (event: TouchEvent) => {
-      stopAutoPlay();
       const touch = event.touches[0];
       startX = touch.clientX;
+      stopAutoPlay();
     },
     { passive: true },
   );
